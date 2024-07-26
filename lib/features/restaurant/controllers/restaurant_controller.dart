@@ -395,6 +395,41 @@ class RestaurantController extends GetxController implements GetxService {
     update();
   }
 
+
+  // Custom code added by naresh for scrollable products
+  Future<List<Product>> getProductsForCategory(int categoryIndex) async {
+    // Ensure categoryList and _restaurant are not null
+    if (_restaurant == null || categoryIndex < 0 || categoryIndex >= _categoryList!.length) {
+      return []; // Return empty list if restaurant or category index is invalid
+    }
+
+    // Determine the category ID type and convert if necessary
+    dynamic categoryId = _categoryList![categoryIndex].id;
+    int? parsedCategoryId;
+
+    if (categoryId is String) {
+      parsedCategoryId = int.tryParse(categoryId);
+    } else if (categoryId is int) {
+      parsedCategoryId = categoryId;
+    }
+
+    // Fetch products for the specified category index
+    ProductModel? productModel = await restaurantServiceInterface.getRestaurantProductList(
+      _restaurant!.id,
+      1, // Assuming offset 1 for initial fetch
+      parsedCategoryId, // Pass categoryId as int?
+      _type, // Assuming _type is set appropriately in your controller
+    );
+
+    if (productModel != null && productModel.products != null) {
+      return productModel.products!;
+    } else {
+      return []; // Return empty list if products are not fetched successfully
+    }
+  }
+  // Custom code added by naresh for scrollable products
+
+
   bool isRestaurantClosed(DateTime dateTime, bool active, List<Schedules>? schedules, {int? customDateDuration}) {
     return restaurantServiceInterface.isRestaurantClosed(dateTime, active, schedules);
   }

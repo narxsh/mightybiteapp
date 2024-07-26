@@ -18,7 +18,8 @@ class RestaurantInfoSectionWidget extends StatelessWidget {
   final Restaurant restaurant;
   final RestaurantController restController;
   final bool hasCoupon;
-  const RestaurantInfoSectionWidget({super.key, required this.restaurant, required this.restController, required this.hasCoupon});
+  final ScrollController scrollController;
+  const RestaurantInfoSectionWidget({super.key, required this.restaurant, required this.restController, required this.hasCoupon,required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
